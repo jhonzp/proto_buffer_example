@@ -8,6 +8,7 @@ import (
 
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
+	complexpb "github.com/jhonzp/proto_buffer_example/src/complex"
 	enumpb "github.com/jhonzp/proto_buffer_example/src/enum_example"
 	simplepb "github.com/jhonzp/proto_buffer_example/src/simple"
 )
@@ -18,9 +19,32 @@ func main() {
 	readAndWriteDemo(sm)
 	jsonDemo(sm)
 	doEnum()
+	doComplex()
+}
+
+func doComplex() {
+	fmt.Println("_____________________doComplex example________________________")
+	cm := complexpb.ComplexMessage{
+		OneDummy: &complexpb.DummyMessage{
+			Id:   1,
+			Name: "First message",
+		},
+		MultipleDummy: []*complexpb.DummyMessage{
+			{
+				Id:   2,
+				Name: "Second message",
+			},
+			{
+				Id:   3,
+				Name: "Third message",
+			},
+		},
+	}
+	fmt.Println(cm)
 }
 
 func doEnum() {
+	fmt.Println("_____________________doEnum example________________________")
 	em := enumpb.EnumMessage{
 		Id:           4321,
 		DayOfTheWeek: enumpb.DayOfTheWeek_MONDAY,
@@ -30,6 +54,7 @@ func doEnum() {
 }
 
 func readAndWriteDemo(pb proto.Message) {
+	fmt.Println("_____________________readAndWriteDemo example________________________")
 	writeToFile("simple.bin", pb)
 	sm2 := &simplepb.SimpleMessage{}
 	readFromFile("simple.bin", sm2)
@@ -37,6 +62,7 @@ func readAndWriteDemo(pb proto.Message) {
 }
 
 func jsonDemo(pb proto.Message) {
+	fmt.Println("_____________________jsonDemo example________________________")
 	ssm := toJson(pb)
 	fmt.Println("marshall to json (string)", ssm)
 	sm2 := &simplepb.SimpleMessage{}
@@ -91,6 +117,7 @@ func readFromFile(fname string, pb proto.Message) error {
 }
 
 func doSimple() *simplepb.SimpleMessage {
+	fmt.Println("_____________________doSimple example________________________")
 	sm := simplepb.SimpleMessage{
 		Id:         1234,
 		IsSimple:   true,
