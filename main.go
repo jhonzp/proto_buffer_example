@@ -10,6 +10,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	complexpb "github.com/jhonzp/proto_buffer_example/src/complex"
 	enumpb "github.com/jhonzp/proto_buffer_example/src/enum_example"
+	"github.com/jhonzp/proto_buffer_example/src/example"
 	simplepb "github.com/jhonzp/proto_buffer_example/src/simple"
 )
 
@@ -20,6 +21,62 @@ func main() {
 	jsonDemo(sm)
 	doEnum()
 	doComplex()
+	readAndWriteAddressBook(doAddressBook(), "AddressBook.bin")
+}
+
+func readAndWriteAddressBook(pb proto.Message, filename string) {
+	fmt.Println("_____________________readAndWriteAddressBook example________________________")
+	writeToFile(filename, pb)
+	sm2 := &example.AddressBook{}
+	readFromFile(filename, sm2)
+	fmt.Println(*sm2)
+}
+
+func doAddressBook() *example.AddressBook {
+	fmt.Println("_____________________doAddressBook example________________________")
+
+	pncasa23 := example.Person_PhoneNumber{
+		Number: "0328232323",
+		Type:   example.Person_HOME,
+	}
+
+	pm := example.Person{
+		Id:    1,
+		Name:  "Jhon Message",
+		Email: "jhonzp@gmail.com",
+		Phones: []*example.Person_PhoneNumber{
+			{
+				Number: "3014444444",
+				Type:   example.Person_WORK,
+			},
+			{
+				Number: "03283666666",
+				Type:   example.Person_HOME,
+			},
+			&pncasa23,
+		},
+	}
+
+	am := example.AddressBook{
+		People: []*example.Person{
+			&pm,
+			&example.Person{
+				Id:    2,
+				Name:  "Lucia Message",
+				Email: "luropa@gmail.com",
+				Phones: []*example.Person_PhoneNumber{
+					&pncasa23,
+					{
+						Number: "310000292",
+						Type:   example.Person_WORK,
+					},
+				},
+			},
+		},
+	}
+
+	fmt.Println(am)
+	return &am
 }
 
 func doComplex() {
